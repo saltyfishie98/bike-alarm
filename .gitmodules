@@ -1,0 +1,3 @@
+[submodule "onBike/lib/vendor/Arduino-MPU6050"]
+	path = onBike/lib/vendor/Arduino-MPU6050
+	url = https://github.com/jarzebski/Arduino-MPU6050.git
