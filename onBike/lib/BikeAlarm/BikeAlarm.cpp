@@ -1,35 +1,56 @@
 #include "BikeAlarm.h"
 
+void BikeAlarm::begin_MPU6050() {
+	// ==== From MPU6050.h =========================
+	while (!objPtr->begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G)) {}
+}
+
+void BikeAlarm::begin_MPU6050MotionSensor() {
+	// ==== From MPU6050.h =========================
+	objPtr->setAccelPowerOnDelay(MPU6050_DELAY_3MS);
+
+	objPtr->setIntFreeFallEnabled(false);
+	objPtr->setIntMotionEnabled(false);
+	objPtr->setIntZeroMotionEnabled(false);
+
+	objPtr->setDHPFMode(MPU6050_DHPF_5HZ);
+
+	objPtr->setMotionDetectionThreshold(2);
+	objPtr->setMotionDetectionDuration(2);
+
+	objPtr->setZeroMotionDetectionThreshold(10);
+	objPtr->setZeroMotionDetectionDuration(2);
+	//============================================
+}
+
 void BikeAlarm::run(void (*onMotion)(void), void (*onStationary)(void)) {
 	Wire.beginTransmission(MPU_ADDR);
-	Wire.write(MPU6050_REG_MOT_DETECT);
+	Wire.write(MPU6050_REG_MOT_DETECT_STATUS);
 	Wire.endTransmission();
 
 	Wire.beginTransmission(MPU_ADDR);
 	Wire.requestFrom(MPU_ADDR, 1);
-	while (!Wire.available()) {
-	};
+	while (!Wire.available()) {}
 
-	data += Wire.read();
-	Serial.println(data);
-	count++;
-	Wire.endTransmission();
+#ifdef test
+	data = ~Wire.read() & 1;
+	if (data == 1)
+		onMotion();
+	else
+		onStationary();
+#else
+	data += ~Wire.read() & 1;
+	confirmation++;
 
-	if (count == trigger) {
-		if (data == count) {
-			secondCount++;
-			// Serial.println(secondCount);
-			if (secondCount >= secondTrigger) {
-				//Serial.println("triger");
-				digitalWrite(4, HIGH);
-				secondCount = 0;
-			}
-		} else {
-			//Serial.println("not triger");
-			digitalWrite(4, LOW);
-			secondCount = 0;
-		}
+	if (confirmation == regularCheck) {
+		if (data == confirmation)
+			onMotion();
+		else
+			onStationary();
+
 		data = 0;
-		count = 0;
+		confirmation = 0;
 	}
+
+#endif
 }

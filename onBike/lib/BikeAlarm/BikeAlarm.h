@@ -1,25 +1,27 @@
 #ifndef BIKEALARM
 #define BIKEALARM
 
+//#define test
+
 #include <Arduino.h>
 #include <Wire.h>
+#include <MPU6050.h>
 
-#define MPU_ADDR				  (0x68)
-#define MPU6050_REG_MOT_THRESHOLD (0x1F)
-#define MPU6050_REG_MOT_DETECT	  (0x61)
+#define MPU_ADDR (0x68)
 
 class BikeAlarm {
   public:
-	BikeAlarm() {}
-	inline void begin() { Wire.begin(); }
+	BikeAlarm(MPU6050* objectPtr) : objPtr(objectPtr) {}
+	void begin_MPU6050();
+	void begin_MPU6050MotionSensor();
 	void run(void (*onMotion)(void), void (*onStationary)(void));
 
   private:
-	const uint8_t trigger = 10;
-	const uint8_t secondTrigger = 28;
-	uint16_t count = 0;
-	uint16_t secondCount = 0;
+	const uint8_t regularCheck = 10;
 	uint16_t data = 0;
+	uint8_t confirmation = 0;
+
+	MPU6050* objPtr;
 };
 
 #endif
