@@ -1,7 +1,7 @@
 #ifndef BIKEALARM
 #define BIKEALARM
 
-//#define test
+#define test
 
 #include <Arduino.h>
 #include <Wire.h>

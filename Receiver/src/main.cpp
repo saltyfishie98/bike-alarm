@@ -1,19 +1,37 @@
-#include <Arduino.h>
+#include <SPI.h>
 #include <LoRa.h>
+#include <Wire.h>
+
+int rssi;
+int pin = 4;
+char incoming;
 
 void setup() {
+	pinMode(pin, OUTPUT);
 	Serial.begin(9600);
-	LoRa.setPins(1,2,3);
 
-	while (!Serial) {
-	};
-	Serial.println("LoRa Sender");
-	if (!LoRa.begin(433E6)) { // or 915E6, the MHz speed of yout module
-		Serial.println("Starting LoRa failed!");
-		while (1) {
-		};
+	if (!LoRa.begin(433E6)) {
+		Serial.println("Failed");
+		delay(500);
+		abort();
 	}
-	Serial.println("Setup success!!!");
+	LoRa.setSpreadingFactor(12);
 }
 
-void loop() {}
+void loop() {
+	LoRa.parsePacket();
+	while (LoRa.available()) {
+		incoming = (char)LoRa.read();
+	}
+
+	Serial.print("Received packet: ");
+	Serial.print(incoming);
+
+	if (incoming == '1') {
+		digitalWrite(pin, HIGH);
+		Serial.println(" Turn On");
+	} else {
+		digitalWrite(pin, LOW);
+		Serial.println();
+	}
+}

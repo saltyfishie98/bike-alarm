@@ -2,7 +2,9 @@
 
 void BikeAlarm::begin_MPU6050() {
 	// ==== From MPU6050.h =========================
-	while (!objPtr->begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G)) {}
+	while (!objPtr->begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_16G)) {
+		Serial.println("aaa");
+	}
 }
 
 void BikeAlarm::begin_MPU6050MotionSensor() {
@@ -26,9 +28,7 @@ void BikeAlarm::begin_MPU6050MotionSensor() {
 void BikeAlarm::run(void (*onMotion)(void), void (*onStationary)(void)) {
 	Wire.beginTransmission(MPU_ADDR);
 	Wire.write(MPU6050_REG_MOT_DETECT_STATUS);
-	Wire.endTransmission();
-
-	Wire.beginTransmission(MPU_ADDR);
+	Wire.endTransmission(false);
 	Wire.requestFrom(MPU_ADDR, 1);
 	while (!Wire.available()) {}
 
