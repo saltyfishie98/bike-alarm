@@ -1,37 +1,60 @@
-#include <SPI.h>
 #include <LoRa.h>
-#include <Wire.h>
+#include "LoRaComm.h"
 
+void blinkCheck();
+void postProcess(char toProcess);
+
+// == Main loop ========================================
+// =====================================================
+LoRaComm receiver(&LoRa);
+
+#define PIN 4
 int rssi;
-int pin = 4;
-char incoming;
+char respond = '0';
 
 void setup() {
-	pinMode(pin, OUTPUT);
 	Serial.begin(9600);
 
-	if (!LoRa.begin(433E6)) {
-		Serial.println("Failed");
-		delay(500);
-		abort();
-	}
-	LoRa.setSpreadingFactor(12);
+	pinMode(PIN, OUTPUT);
+	digitalWrite(PIN, LOW);
+
+	receiver.begin(LORA_RX);
+
+	blinkCheck();
 }
 
 void loop() {
-	LoRa.parsePacket();
-	while (LoRa.available()) {
-		incoming = (char)LoRa.read();
-	}
+	receiver.passCharRespondTo(respond);
+	postProcess(respond);
+}
 
+// == Functions ========================================
+// =====================================================
+void blinkCheck() {
+	digitalWrite(PIN, HIGH);
+	delay(500);
+	digitalWrite(PIN, LOW);
+	delay(500);
+	digitalWrite(PIN, HIGH);
+	delay(500);
+	digitalWrite(PIN, LOW);
+	delay(500);
+	digitalWrite(PIN, HIGH);
+	delay(500);
+	digitalWrite(PIN, LOW);
+	delay(500);
+}
+
+void postProcess(char toProcess) {
 	Serial.print("Received packet: ");
-	Serial.print(incoming);
+	Serial.print(toProcess);
 
-	if (incoming == '1') {
-		digitalWrite(pin, HIGH);
+	if (toProcess == '1') {
+		digitalWrite(PIN, HIGH);
 		Serial.println(" Turn On");
 	} else {
-		digitalWrite(pin, LOW);
+		digitalWrite(PIN, LOW);
 		Serial.println();
+		toProcess = '0';
 	}
 }
