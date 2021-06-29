@@ -38,17 +38,17 @@ void loop() { onBike.run(onMotion, onStationary); }
 // =====================================================
 void blinkCheck() {
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 }
 
 void onMotion() {

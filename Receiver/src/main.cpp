@@ -8,17 +8,23 @@ void postProcess(char toProcess);
 // =====================================================
 LoRaComm receiver(&LoRa);
 
-#define PIN 4
+#define NSS	  5
+#define RESET 22
+#define DIO0  21
+#define PIN	  16
 int rssi;
 char respond = '0';
 
 void setup() {
-	Serial.begin(9600);
+	Serial.begin(115200);
 
 	pinMode(PIN, OUTPUT);
+	digitalWrite(PIN, HIGH);
+	delay(500);
 	digitalWrite(PIN, LOW);
+	delay(500);
 
-	receiver.begin(LORA_RX);
+	receiver.begin(LORA_TX, true, NSS, RESET, DIO0);
 
 	blinkCheck();
 }
@@ -32,17 +38,17 @@ void loop() {
 // =====================================================
 void blinkCheck() {
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, HIGH);
-	delay(500);
+	delay(100);
 	digitalWrite(PIN, LOW);
-	delay(500);
+	delay(100);
 }
 
 void postProcess(char toProcess) {

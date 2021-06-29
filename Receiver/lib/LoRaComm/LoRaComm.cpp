@@ -33,6 +33,6 @@ void LoRaComm::transmitChar(const char& message) {
 void LoRaComm::passCharRespondTo(char& respond) {
 	LoRaObj->parsePacket();
 	while (LoRaObj->available()) {
-		respond = (char)LoRa.read();
+		respond = (char)LoRaObj->read();
 	}
 }
