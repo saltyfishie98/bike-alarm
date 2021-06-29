@@ -1,9 +1,6 @@
-[submodule "onBike/lib/vendor/Arduino-MPU6050"]
-	path = onBike/lib/vendor/Arduino-MPU6050
+[submodule "vendor/arduino-LoRa"]
+	path = vendor/arduino-LoRa
+	url = https://github.com/sandeepmistry/arduino-LoRa.git
+[submodule "vendor/Arduino-MPU6050"]
+	path = vendor/Arduino-MPU6050
 	url = https://github.com/jarzebski/Arduino-MPU6050.git
-[submodule "onBike/lib/vendor/arduino-LoRa"]
-	path = onBike/lib/vendor/arduino-LoRa
-	url = https://github.com/sandeepmistry/arduino-LoRa.git
-[submodule "Receiver/lib/vendor/arduino-LoRa"]
-	path = Receiver/lib/vendor/arduino-LoRa
-	url = https://github.com/sandeepmistry/arduino-LoRa.git
