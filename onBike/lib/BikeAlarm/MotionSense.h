@@ -9,12 +9,12 @@
 
 #define MPU_ADDR (0x68)
 
-class BikeAlarm {
+class MotionSense {
   public:
-	BikeAlarm(MPU6050* objectPtr) : objPtr(objectPtr) {}
+	MotionSense(MPU6050* objectPtr) : objPtr(objectPtr) {}
 	void begin_MPU6050();
 	void begin_MPU6050MotionSensor();
-	void run(void (*onMotion)(void), void (*onStationary)(void));
+	void runOnMotion(void (*onMotion)(void), void (*onStationary)(void));
 
   private:
 	const uint8_t regularCheck = 10;

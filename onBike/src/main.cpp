@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <MPU6050.h>
 #include <LoRa.h>
-#include "BikeAlarm.h"
+#include "MotionSense.h"
 #include "LoRaComm.h"
 
 void blinkCheck();
@@ -11,7 +11,7 @@ void onStationary();
 // == Main loop ========================================
 // =====================================================
 MPU6050 onBikeMPU;
-BikeAlarm onBike(&onBikeMPU);
+MotionSense onBike(&onBikeMPU);
 LoRaComm transmitter(&LoRa);
 
 #define NSS	  2
@@ -25,30 +25,24 @@ void setup() {
 	pinMode(PIN, OUTPUT);
 	digitalWrite(PIN, LOW);
 
-	transmitter.begin(LORA_TX, true, NSS, RESET, DIO0);
+	transmitter.begin(LORACOMM::TX, true, NSS, RESET, DIO0);
 	onBike.begin_MPU6050();
 	onBike.begin_MPU6050MotionSensor();
 
 	blinkCheck();
 }
 
-void loop() { onBike.run(onMotion, onStationary); }
+void loop() { onBike.runOnMotion(onMotion, onStationary); }
 
 // == Functions ========================================
 // =====================================================
 void blinkCheck() {
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
+	for (int i = 0; i < 3; i++) {
+		digitalWrite(PIN, HIGH);
+		delay(100);
+		digitalWrite(PIN, LOW);
+		delay(100);
+	}
 }
 
 void onMotion() {

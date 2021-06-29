@@ -2,7 +2,7 @@
 #include "LoRaComm.h"
 
 void blinkCheck();
-void postProcess(char toProcess);
+void postProcess(char& toProcess);
 
 // == Main loop ========================================
 // =====================================================
@@ -24,34 +24,28 @@ void setup() {
 	digitalWrite(PIN, LOW);
 	delay(500);
 
-	receiver.begin(LORA_TX, true, NSS, RESET, DIO0);
+	receiver.begin(LORACOMM::TX, true, NSS, RESET, DIO0);
 
 	blinkCheck();
 }
 
 void loop() {
-	receiver.passCharRespondTo(respond);
+	receiver.passCharRespondTo(&respond);
 	postProcess(respond);
 }
 
 // == Functions ========================================
 // =====================================================
 void blinkCheck() {
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
-	digitalWrite(PIN, HIGH);
-	delay(100);
-	digitalWrite(PIN, LOW);
-	delay(100);
+	for (int i = 0; i < 3; i++) {
+		digitalWrite(PIN, HIGH);
+		delay(100);
+		digitalWrite(PIN, LOW);
+		delay(100);
+	}
 }
 
-void postProcess(char toProcess) {
+void postProcess(char& toProcess) {
 	Serial.print("Received packet: ");
 	Serial.print(toProcess);
 
