@@ -3,4 +3,4 @@
 test/
 include/
 
-.code-workspace
+*.code-workspace
